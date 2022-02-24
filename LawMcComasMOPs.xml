@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<m:model version="26" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://cia.his.se/facts/m" xmlns:oc="http://cia.his.se/facts/oc" xmlns:v="http://cia.his.se/facts/v" xmlns:n="http://cia.his.se/facts/n" xmlns:l="http://cia.his.se/facts/l" xmlns:f="http://cia.his.se/facts/f" xmlns:t="http://cia.his.se/facts/t" xmlns:a="http://cia.his.se/facts/a" xmlns:o="http://cia.his.se/facts/o" xmlns:idi="http://cia.his.se/facts/idi" xsi:schemaLocation="http://cia.his.se/facts/m file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/model.xsd http://cia.his.se/facts/oc file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/object_commons.xsd http://cia.his.se/facts/v file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/variants.xsd http://cia.his.se/facts/n file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/nodes.xsd http://cia.his.se/facts/l file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/logics.xsd http://cia.his.se/facts/f file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/flows.xsd http://cia.his.se/facts/t file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/templates.xsd http://cia.his.se/facts/a file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/application.xsd http://cia.his.se/facts/o file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/optimization.xsd http://cia.his.se/facts/idi file:///C:/Users/sveb/My_Work/My_Projects/FACTS_2/Development/XML/Schemas/input_data_interface.xsd">
+  <m:settings>
+    <m:start>2010-01-04T00:00:00</m:start>
+    <m:duration>40:00:00:00</m:duration>
+    <m:warm_up>10:00:00:00</m:warm_up>
+    <m:replications>10</m:replications>
+    <m:output_options>
+      <m:shifting_bottleneck>false</m:shifting_bottleneck>
+    </m:output_options>
+    <m:visuals>
+      <m:link_labels>false</m:link_labels>
+      <m:logic_links_visible>true</m:logic_links_visible>
+      <m:link_msg>false</m:link_msg>
+    </m:visuals>
+  </m:settings>
+  <o:settings start="2010-01-04 00:00:00" simHorizon="40:00:00:00" simWarmUp="10:00:00:00" replications="10">
+    <o:inputs>
+      <o:nodeInput name="PO1_NumOPs" xPath="n:paralleloperation/n:num_ops/oc:value" multiPropID="" shortName="NumOPs" node="node:50" dataType="INTEGER" set="{1;7}" />
+      <o:nodeInput name="PO2_NumOPs" xPath="n:paralleloperation/n:num_ops/oc:value" multiPropID="" shortName="NumOPs" node="node:51" dataType="INTEGER" set="{1;7}" />
+      <o:nodeInput name="PO3_NumOPs" xPath="n:paralleloperation/n:num_ops/oc:value" multiPropID="" shortName="NumOPs" node="node:52" dataType="INTEGER" set="{1;7}" />
+      <o:nodeInput name="PO4_NumOPs" xPath="n:paralleloperation/n:num_ops/oc:value" multiPropID="" shortName="NumOPs" node="node:53" dataType="INTEGER" set="{1;7}" />
+      <o:nodeInput name="B1_Capacity" xPath="n:buffer/n:capacity/oc:value" multiPropID="" shortName="Capacity" node="node:41" dataType="INTEGER" set="{1;10}" />
+      <o:nodeInput name="B2_Capacity" xPath="n:buffer/n:capacity/oc:value" multiPropID="" shortName="Capacity" node="node:42" dataType="INTEGER" set="{1;10}" />
+      <o:nodeInput name="B3_Capacity" xPath="n:buffer/n:capacity/oc:value" multiPropID="" shortName="Capacity" node="node:43" dataType="INTEGER" set="{1;10}" />
+    </o:inputs>
+    <o:outputs>
+      <o:plantOutput name="Throughput" xPath="plant/throughput" shortName="Throughput" type="real" />
+      <o:plantOutput name="WIP" xPath="plant/wip" shortName="WIP" type="real" />
+      <o:plantOutput name="VarA_PartsProduced" xPath="variant[@id='var1']/producedParts" shortName="VarA - Parts Produced" type="real" />
+      <o:plantOutput name="LeadTime" xPath="plant/leadTime" shortName="Lead Time" type="real" />
+    </o:outputs>
+    <o:objectives>
+      <o:objective name="profit" formula="200*VarA_PartsProduced-25000*(PO1_NumOPs+PO2_NumOPs+PO3_NumOPs+PO4_NumOPs)-1000*(B1_Capacity+B2_Capacity+B3_Capacity)" goal="Maximize" delcol="" />
+    </o:objectives>
+    <o:custom_outputs />
+    <o:inputConstraints>
+      <o:constraint formula="PO1_NumOPs+PO2_NumOPs+PO3_NumOPs+PO4_NumOPs&lt;=10" delcol="" />
+      <o:constraint formula="B1_Capacity+B2_Capacity+B3_Capacity&lt;=20" delcol="" />
+    </o:inputConstraints>
+    <o:algorithm name="CMA-ES">
+      <o:setting name="Maximum number of evaluations" value="5000" />
+      <o:setting name="Maximum allowed time (seconds)" value="0" />
+      <o:setting name="Include input extremes" value="True" />
+      <o:setting name="Include experiments" value="" />
+      <o:setting name="Repair linear constraints" value="True" />
+      <o:setting name="Hypervolume reference point" value="" />
+      <o:setting name="Store all replications" value="False" />
+      <o:setting name="Use non-dominated archive" value="True" />
+      <o:setting name="Population size" value="" />
+      <o:setting name="Offspring population size" value="" />
+      <o:setting name="Scale input variables" value="True" />
+      <o:setting name="Initial sigma" value="2" />
+      <o:setting name="Objective index" value="0" />
+      <o:setting name="Weight factor" value="1" />
+      <o:setting name="Dampening" value="" />
+      <o:setting name="cs" value="" />
+      <o:setting name="ccumcov" value="" />
+      <o:setting name="ccov" value="" />
+      <o:setting name="Weights" value="Logarithmic" />
+    </o:algorithm>
+  </o:settings>
+  <m:experiments>
+    <m:experiment optId="19" />
+    <m:experiment optId="455" />
+    <m:experiment optId="456" />
+  </m:experiments>
+  <a:settings />
+  <t:templates />
+  <v:variants>
+    <v:variant name="VarA" id="var1" length="0.5" width="0.5" units="1" />
+  </v:variants>
+  <oc:variables />
+  <m:skills />
+  <n:component>
+    <n:nodes>
+      <n:node id="node:41" name="B1" xpos="300" ypos="360">
+        <n:buffer>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:capacity data_type="integer">
+            <oc:value>10</oc:value>
+          </n:capacity>
+          <n:process_time>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:process_time>
+          <n:exit_strategy rule="successor_order" />
+          <n:dispatch rule="FIFO" />
+        </n:buffer>
+      </n:node>
+      <n:node id="node:42" name="B2" xpos="500" ypos="360">
+        <n:buffer>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:capacity data_type="integer">
+            <oc:value>3</oc:value>
+          </n:capacity>
+          <n:process_time>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:process_time>
+          <n:exit_strategy rule="successor_order" />
+          <n:dispatch rule="FIFO" />
+        </n:buffer>
+      </n:node>
+      <n:node id="node:43" name="B3" xpos="700" ypos="360">
+        <n:buffer>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:capacity data_type="integer">
+            <oc:value>1</oc:value>
+          </n:capacity>
+          <n:process_time>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:process_time>
+          <n:exit_strategy rule="successor_order" />
+          <n:dispatch rule="FIFO" />
+        </n:buffer>
+      </n:node>
+      <n:node id="node:44" name="Source1" xpos="60" ypos="360">
+        <n:entrance>
+          <n:source>
+            <oc:disturbances>
+              <oc:disturbance>
+                <oc:percent name="Fail1" timeReference="simulation">
+                  <oc:availability data_type="real">
+                    <oc:value>100.0</oc:value>
+                  </oc:availability>
+                  <oc:mttr data_type="time">
+                    <oc:value>1:00</oc:value>
+                  </oc:mttr>
+                </oc:percent>
+              </oc:disturbance>
+            </oc:disturbances>
+            <oc:user_attributes />
+            <n:exit_strategy rule="successor_order" />
+            <n:accumulating data_type="boolean">
+              <oc:value>true</oc:value>
+            </n:accumulating>
+            <oc:creation>
+              <oc:inter_arrival_time>
+                <oc:distribution>
+                  <oc:constant>
+                    <oc:value data_type="time">
+                      <oc:value>0</oc:value>
+                    </oc:value>
+                  </oc:constant>
+                </oc:distribution>
+                <oc:limit>
+                  <oc:time>
+                    <oc:start>
+                      <oc:distribution>
+                        <oc:constant>
+                          <oc:value data_type="time">
+                            <oc:value>0</oc:value>
+                          </oc:value>
+                        </oc:constant>
+                      </oc:distribution>
+                    </oc:start>
+                    <oc:stop>
+                      <oc:distribution>
+                        <oc:constant>
+                          <oc:value data_type="time">
+                            <oc:value>0</oc:value>
+                          </oc:value>
+                        </oc:constant>
+                      </oc:distribution>
+                    </oc:stop>
+                  </oc:time>
+                </oc:limit>
+                <oc:variants>
+                  <oc:sequence cyclic="true" batch="false" sequence_batch="false">
+                    <oc:table>
+                      <oc:cells>
+                        <oc:cell row="1" col="1" data_type="string">
+                          <oc:value>var1</oc:value>
+                        </oc:cell>
+                        <oc:cell row="1" col="2" data_type="distribution">
+                          <oc:distribution>
+                            <oc:constant>
+                              <oc:value data_type="integer">
+                                <oc:value>1</oc:value>
+                              </oc:value>
+                            </oc:constant>
+                          </oc:distribution>
+                        </oc:cell>
+                      </oc:cells>
+                    </oc:table>
+                  </oc:sequence>
+                </oc:variants>
+              </oc:inter_arrival_time>
+            </oc:creation>
+          </n:source>
+        </n:entrance>
+      </n:node>
+      <n:node id="node:45" name="Sink1" xpos="920" ypos="360">
+        <n:exit>
+          <n:sink>
+            <oc:disturbances>
+              <oc:disturbance>
+                <oc:percent name="Fail1" timeReference="simulation">
+                  <oc:availability data_type="real">
+                    <oc:value>100.0</oc:value>
+                  </oc:availability>
+                  <oc:mttr data_type="time">
+                    <oc:value>1:00</oc:value>
+                  </oc:mttr>
+                </oc:percent>
+              </oc:disturbance>
+            </oc:disturbances>
+            <oc:user_attributes />
+            <n:process_time>
+              <oc:distribution>
+                <oc:constant>
+                  <oc:value data_type="time">
+                    <oc:value>0</oc:value>
+                  </oc:value>
+                </oc:constant>
+              </oc:distribution>
+            </n:process_time>
+            <n:dispatch rule="FIFO" />
+          </n:sink>
+        </n:exit>
+      </n:node>
+      <n:node id="node:50" name="PO1" xpos="220" ypos="360">
+        <n:paralleloperation>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:process_time>
+            <oc:distribution>
+              <oc:exponential>
+                <oc:mean data_type="time">
+                  <oc:value>20:00</oc:value>
+                </oc:mean>
+              </oc:exponential>
+            </oc:distribution>
+            <n:ept>none</n:ept>
+          </n:process_time>
+          <n:exit_strategy rule="cyclic" />
+          <n:dispatch rule="FIFO" />
+          <n:num_ops data_type="integer">
+            <oc:value>1</oc:value>
+          </n:num_ops>
+          <n:mixed_processing data_type="boolean">
+            <oc:value>true</oc:value>
+          </n:mixed_processing>
+          <n:syncronize_entries data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_entries>
+          <n:entry_timeout>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:entry_timeout>
+          <n:syncronize_exits data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_exits>
+          <n:failure_zone data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:failure_zone>
+        </n:paralleloperation>
+      </n:node>
+      <n:node id="node:51" name="PO2" xpos="400" ypos="360">
+        <n:paralleloperation>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:process_time>
+            <oc:distribution>
+              <oc:exponential>
+                <oc:mean data_type="time">
+                  <oc:value>30:00</oc:value>
+                </oc:mean>
+              </oc:exponential>
+            </oc:distribution>
+            <n:ept>none</n:ept>
+          </n:process_time>
+          <n:exit_strategy rule="cyclic" />
+          <n:dispatch rule="FIFO" />
+          <n:num_ops data_type="integer">
+            <oc:value>1</oc:value>
+          </n:num_ops>
+          <n:mixed_processing data_type="boolean">
+            <oc:value>true</oc:value>
+          </n:mixed_processing>
+          <n:syncronize_entries data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_entries>
+          <n:entry_timeout>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:entry_timeout>
+          <n:syncronize_exits data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_exits>
+          <n:failure_zone data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:failure_zone>
+        </n:paralleloperation>
+      </n:node>
+      <n:node id="node:52" name="PO3" xpos="600" ypos="360">
+        <n:paralleloperation>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:process_time>
+            <oc:distribution>
+              <oc:exponential>
+                <oc:mean data_type="time">
+                  <oc:value>12:00</oc:value>
+                </oc:mean>
+              </oc:exponential>
+            </oc:distribution>
+            <n:ept>none</n:ept>
+          </n:process_time>
+          <n:exit_strategy rule="cyclic" />
+          <n:dispatch rule="FIFO" />
+          <n:num_ops data_type="integer">
+            <oc:value>1</oc:value>
+          </n:num_ops>
+          <n:mixed_processing data_type="boolean">
+            <oc:value>true</oc:value>
+          </n:mixed_processing>
+          <n:syncronize_entries data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_entries>
+          <n:entry_timeout>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:entry_timeout>
+          <n:syncronize_exits data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_exits>
+          <n:failure_zone data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:failure_zone>
+        </n:paralleloperation>
+      </n:node>
+      <n:node id="node:53" name="PO4" xpos="800" ypos="360">
+        <n:paralleloperation>
+          <oc:disturbances>
+            <oc:disturbance>
+              <oc:percent name="Fail1" timeReference="simulation">
+                <oc:availability data_type="real">
+                  <oc:value>100.0</oc:value>
+                </oc:availability>
+                <oc:mttr data_type="time">
+                  <oc:value>1:00</oc:value>
+                </oc:mttr>
+              </oc:percent>
+            </oc:disturbance>
+          </oc:disturbances>
+          <oc:user_attributes />
+          <n:process_time>
+            <oc:distribution>
+              <oc:exponential>
+                <oc:mean data_type="time">
+                  <oc:value>15:00</oc:value>
+                </oc:mean>
+              </oc:exponential>
+            </oc:distribution>
+            <n:ept>none</n:ept>
+          </n:process_time>
+          <n:exit_strategy rule="cyclic" />
+          <n:dispatch rule="FIFO" />
+          <n:num_ops data_type="integer">
+            <oc:value>1</oc:value>
+          </n:num_ops>
+          <n:mixed_processing data_type="boolean">
+            <oc:value>true</oc:value>
+          </n:mixed_processing>
+          <n:syncronize_entries data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_entries>
+          <n:entry_timeout>
+            <oc:distribution>
+              <oc:constant>
+                <oc:value data_type="time">
+                  <oc:value>0</oc:value>
+                </oc:value>
+              </oc:constant>
+            </oc:distribution>
+          </n:entry_timeout>
+          <n:syncronize_exits data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:syncronize_exits>
+          <n:failure_zone data_type="boolean">
+            <oc:value>false</oc:value>
+          </n:failure_zone>
+        </n:paralleloperation>
+      </n:node>
+    </n:nodes>
+    <l:logics />
+    <f:flows>
+      <f:flow name="Default flow" id="flow:1">
+        <f:variants>
+          <oc:reference idref="var1" />
+        </f:variants>
+        <f:nodes>
+          <f:node idref="node:44">
+            <f:successors>
+              <oc:reference idref="node:50" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:50">
+            <f:predecessors>
+              <oc:reference idref="node:44" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:41" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:41">
+            <f:predecessors>
+              <oc:reference idref="node:50" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:51" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:51">
+            <f:predecessors>
+              <oc:reference idref="node:41" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:42" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:42">
+            <f:predecessors>
+              <oc:reference idref="node:51" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:52" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:52">
+            <f:predecessors>
+              <oc:reference idref="node:42" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:43" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:43">
+            <f:predecessors>
+              <oc:reference idref="node:52" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:53" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:53">
+            <f:predecessors>
+              <oc:reference idref="node:43" active="True" weight="1" />
+            </f:predecessors>
+            <f:successors>
+              <oc:reference idref="node:45" active="True" weight="1" />
+            </f:successors>
+          </f:node>
+          <f:node idref="node:45">
+            <f:predecessors>
+              <oc:reference idref="node:53" active="True" weight="1" />
+            </f:predecessors>
+          </f:node>
+        </f:nodes>
+      </f:flow>
+    </f:flows>
+    <oc:notes />
+    <oc:media>
+      <oc:images />
+    </oc:media>
+  </n:component>
+  <m:media>
+    <m:images />
+  </m:media>
+  <idi:input_maps />
+</m:model>
