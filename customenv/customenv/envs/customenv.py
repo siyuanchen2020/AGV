@@ -3,6 +3,15 @@ from gym import Env
 from gym.spaces import Discrete, Box
 import numpy
 import os
+import gym
+from stable_baselines3 import DQN
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common import results_plotter
+from stable_baselines3.common.results_plotter import load_results, ts2xy
+from stable_baselines3.common.evaluation import evaluate_policy
+import matplotlib.pyplot as plt
+from stable_baselines3.common.callbacks import BaseCallback
+
 #author: Siyuan Chen
 #This code is aimed to create a custom gym environment for Facts Analyzer XML model.
 
@@ -16,8 +25,8 @@ def custom_input(action):
         input_file.append(input_var)
     return input_file
 
-action = range(1,4)
-input_file = custom_input(action)
+#action = range(1,4)
+#input_file = custom_input(action)
 #print(input_file)
 
 
@@ -26,7 +35,7 @@ class customenv(Env):
         # Actions we can take, down, stay, up
         self.action_space = Discrete(3)
         # Temperature array
-        self.observation_space = gym.spaces.Box(low= 0, high=1000000)
+        self.observation_space = Discrete(2)
 
     def step(self, action):
         # set the input file
@@ -36,9 +45,9 @@ class customenv(Env):
             input_var = numpy.array(decision_var)
             numpy.savetxt('input.txt', input_var)
         # execute the runner
-        os.system("xsim-runner.exe --model LawMcComasMOPs.xml --input input.txt --output_txt output_Law3.txt")
+        os.system("xsim-runner.exe --model LawMcComasMOPs.xml --input input.txt --output_txt output_Law.txt")
         # write in the output
-        with open('output_Law3.txt') as my_file:
+        with open('output_Law.txt') as my_file:
             # Throughput, Work-In-Process, Parts-Produced, and Lead-Time
             output_array = my_file.readlines()
         # get the throughput
@@ -64,9 +73,29 @@ class customenv(Env):
     def close(self):
         pass
 
-'''
+
 env = customenv()
 
+action = range(1,4)
+
+log_dir = "/tmp/gym/"
+#os.makedirs(log_dir, exist_ok=True)
+
+'''
+if not os.path.exists(models_dir):
+    os.makedirs(models_dir)
+'''
+
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+
+env = Monitor(env, log_dir)
+
+model = DQN("MlpPolicy", env, verbose=1)
+#model.learn(total_timesteps=100000, log_interval=4)
+
+'''
 episodes = 10
 for episode in range(1, episodes + 1):
     state = env.reset()

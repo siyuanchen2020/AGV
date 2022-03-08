@@ -1,0 +1,6 @@
+setup.py
+customenv.egg-info/PKG-INFO
+customenv.egg-info/SOURCES.txt
+customenv.egg-info/dependency_links.txt
+customenv.egg-info/requires.txt
+customenv.egg-info/top_level.txt
